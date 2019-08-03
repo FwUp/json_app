@@ -1,11 +1,18 @@
 import json
+import os
+from subprocess import call
 from difflib import get_close_matches
 
 # load json data
 data = json.load(open("data.json"))
 
+# clear screen function
+def clear_screen():
+    i = call('clear' if os.name == 'posix' else 'cls')
+
 # main function
 def translate(w):
+    clear_screen()
     w = w.lower()
     if w in data:
         return data[w]
@@ -16,9 +23,14 @@ def translate(w):
     elif len(get_close_matches(w, data.keys())) > 0: # check close matches
         answer = input("Did you mean {} instead?\nEnter Y if yes and N if no: ".format(get_close_matches(w, data.keys())[0]))
         if answer == "Y" or answer == "y":
+            clear_screen()
             return data[get_close_matches(w, data.keys())[0]]
         elif answer == "N" or answer == "n":
+            clear_screen()
             return "The \"{}\" doesn't exist in dictionary.Please double check it.".format(word)
+        elif answer.isdigit():
+            clear_screen()
+            return "That's a number fool,only words are allowed"
         else:
             return "We didn't understand your entry."
     elif  w.isdigit(): # check numbers
@@ -27,7 +39,6 @@ def translate(w):
         return "The \"{}\" is not in dictionary".format(w)
 
 word = input("Enter word: ")
-
 output = translate(word)
 
 if type(output) == list: # check if output is list data type
