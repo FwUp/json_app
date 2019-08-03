@@ -1,16 +1,90 @@
-import json
-import os
-import sys
-import time
+import json, os, sys, time
 from subprocess import call
 from difflib import get_close_matches
 
 # load json data
 data = json.load(open("data.json"))
 
+# menu function
+def menu():
+    print("Main Menu")
+    choice = input("""
+            Q:quit program
+            S:start dictionary
+            M:main menu
+            L:list all dict items that start with choosen letter
+Please enter your choice: """).lower()
+    if choice == 'q':
+        clear_screen()
+        print("Good Bye\nExiting...")
+        time.sleep(2)
+        sys.exit
+    elif choice == 's':
+        word = input("Enter word: ")
+        output = translate(word)
+
+        if type(output) == list: # check if output is list data type
+            for i in output:
+                print(i)
+            q = input("Press m to go to main menu,or q to quit: ").lower()
+            if q == 'm':
+                clear_screen()
+                menu()
+            elif q == 'q':
+                print("Good Bye!")
+                time.sleep(1)
+                sys.exit
+            else:
+                print("Wrong choice!!!Exiting...")
+                sys.exit
+        else:
+            print(output)
+            q = input("Press m to go to main menu,or q to quit: ").lower()
+            if q == 'm':
+                clear_screen()
+                menu()
+            elif q == 'q':
+                print("Good Bye!")
+                time.sleep(1)
+                sys.exit
+            else:
+                print("Wrong choice!!!Exiting")
+                sys.exit
+
+            
+    elif choice == 'm':
+        clear_screen()
+        menu()
+    elif choice == 'l':
+        clear_screen()  
+        dict(data)
+        
+    else:
+        print("Wrong choice!!!")
+        time.sleep(3)
+        clear_screen()
+        menu()
+        
 # clear screen function
 def clear_screen():
     i = call('clear' if os.name == 'posix' else 'cls')
+
+# sort function
+def dict(data):
+    a = input("Choose a letter: ")
+    list = []
+    list2 = []
+    clear_screen()
+    
+    for i in data.keys():
+        list.append(i)
+        
+    for i in list:
+        if i.startswith(a):
+            list2.append(i)
+    
+    for i in list2:
+        print(i)
 
 # main function
 def translate(w):
@@ -40,32 +114,5 @@ def translate(w):
     else:
         return "The \"{}\" is not in dictionary".format(w)
 
-def menu():
-    print("Main Menu")
-    choice = input("""
-            Q:quit program
-            S:start dictionary
-            M:main menu
-Please enter your choice: """).lower()
-    if choice == 'q':
-        clear_screen()
-        time.sleep(3)
-        print("Good Bye\nExiting...")
-        sys.exit
-    elif choice == 's':
-        word = input("Enter word: ")
-        output = translate(word)
 
-        if type(output) == list: # check if output is list data type
-            for i in output:
-                print(i)
-        else:
-            print(output)
-    elif choice == 'm':
-        clear_screen()
-        menu()
-    else:
-        print("Wrong choice")
-        menu()
-        
 menu()
