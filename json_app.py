@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+import time
 from subprocess import call
 from difflib import get_close_matches
 
@@ -38,11 +40,32 @@ def translate(w):
     else:
         return "The \"{}\" is not in dictionary".format(w)
 
-word = input("Enter word: ")
-output = translate(word)
+def menu():
+    print("Main Menu")
+    choice = input("""
+            Q:quit program
+            S:start dictionary
+            M:main menu
+Please enter your choice: """).lower()
+    if choice == 'q':
+        clear_screen()
+        time.sleep(3)
+        print("Good Bye\nExiting...")
+        sys.exit
+    elif choice == 's':
+        word = input("Enter word: ")
+        output = translate(word)
 
-if type(output) == list: # check if output is list data type
-    for i in output:
-        print(i)
-else:
-    print(output)
+        if type(output) == list: # check if output is list data type
+            for i in output:
+                print(i)
+        else:
+            print(output)
+    elif choice == 'm':
+        clear_screen()
+        menu()
+    else:
+        print("Wrong choice")
+        menu()
+        
+menu()
