@@ -7,12 +7,13 @@ data = json.load(open("data.json"))
 
 # menu function
 def menu():
+    clear_screen()
     print("Main Menu")
     choice = input("""
             Q:quit program
             S:start dictionary
             M:main menu
-            L:list all dict items that start with choosen letter
+            L:list all entries that start with choosen letter or letters
 Please enter your choice: """).lower()
     if choice == 'q':
         clear_screen()
@@ -31,6 +32,7 @@ Please enter your choice: """).lower()
                 clear_screen()
                 menu()
             elif q == 'q':
+                clear_screen()
                 print("Good Bye!")
                 time.sleep(1)
                 sys.exit
@@ -39,26 +41,14 @@ Please enter your choice: """).lower()
                 sys.exit
         else:
             print(output)
-            q = input("Press m to go to main menu,or q to quit: ").lower()
-            if q == 'm':
-                clear_screen()
-                menu()
-            elif q == 'q':
-                print("Good Bye!")
-                time.sleep(1)
-                sys.exit
-            else:
-                print("Wrong choice!!!Exiting")
-                sys.exit
-
-            
+            main_menu_function()
+        
     elif choice == 'm':
         clear_screen()
         menu()
     elif choice == 'l':
         clear_screen()  
-        dict(data)
-        
+        dict(data)     
     else:
         print("Wrong choice!!!")
         time.sleep(3)
@@ -74,7 +64,7 @@ def dict(data):
     a = input("Choose a letter: ")
     list = []
     list2 = []
-    clear_screen()
+#    clear_screen()
     
     for i in data.keys():
         list.append(i)
@@ -84,9 +74,13 @@ def dict(data):
             list2.append(i)
     
     for i in list2:
-        print(i)
+        print(i) # print(*list2, sep=",") display items separated by comma
+        time.sleep(0.3)
+    
+    print('\n')
+    main_menu_function()
 
-# main function
+# translate function
 def translate(w):
     clear_screen()
     w = w.lower()
@@ -103,7 +97,7 @@ def translate(w):
             return data[get_close_matches(w, data.keys())[0]]
         elif answer == "N" or answer == "n":
             clear_screen()
-            return "The \"{}\" doesn't exist in dictionary.Please double check it.".format(word)
+            return "The \"{}\" doesn't exist in dictionary.Please double check it.".format(w)
         elif answer.isdigit():
             clear_screen()
             return "That's a number fool,only words are allowed"
@@ -114,5 +108,18 @@ def translate(w):
     else:
         return "The \"{}\" is not in dictionary".format(w)
 
+def main_menu_function():
+    q = input("Press m to go to main menu,or q to quit: ").lower()
+    if q == 'm':
+        clear_screen()
+        menu()
+    elif q == 'q':
+        clear_screen()
+        print("Good Bye!")
+        time.sleep(1)
+        sys.exit
+    else:
+        print("Wrong choice!!!Exiting")
+        sys.exit
 
 menu()
